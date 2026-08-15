@@ -2,6 +2,8 @@
 
 **Swipe through tiny games in your browser — tap to play, swipe to the next, and an agent can invent a new one in under a minute.**
 
+![Playfeed demo](public/playfeed-demo.gif)
+
 Production: https://playfeed-lyart.vercel.app  
 Embed demo: https://playfeed-lyart.vercel.app/demo-host.html
 
