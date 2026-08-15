@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { SEED_GAMES } from "../games/seeds";
 import { GameSpecSchema, parseGameSpec } from "./gameSpec";
 
 const validSpec = {
@@ -74,5 +75,10 @@ describe("GameSpecSchema", () => {
 
     expect(GameSpecSchema.safeParse(withEmoji).success).toBe(true);
     expect(GameSpecSchema.safeParse(tooLong).success).toBe(false);
+  });
+
+  it("validates every bundled seed game", () => {
+    expect(SEED_GAMES).toHaveLength(5);
+    SEED_GAMES.forEach((game) => expect(parseGameSpec(game)).toEqual(game));
   });
 });
