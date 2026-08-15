@@ -6,13 +6,18 @@ import type { GameSpec } from "../types/gameSpec";
 
 interface GameSlideProps {
   active: boolean;
+  embed?: boolean;
+  showNudge?: boolean;
   spec: GameSpec;
 }
 
 export const GameSlide = forwardRef<HTMLDivElement, GameSlideProps>(function GameSlide(
-  { active, spec },
+  { active, embed = false, showNudge = false, spec },
   ref,
 ) {
+  const hint =
+    spec.input === "drag_x" ? "Drag to dodge · swipe for next" : "Tap to play · swipe for next";
+
   return (
     <article
       ref={ref}
@@ -36,20 +41,33 @@ export const GameSlide = forwardRef<HTMLDivElement, GameSlideProps>(function Gam
           </h1>
         </div>
         <div className="flex flex-col items-end gap-2">
-          <Link
-            to="/create"
-            className="pointer-events-auto inline-flex min-h-11 items-center rounded-full bg-[#D8FF46] px-4 text-[11px] font-black uppercase tracking-[0.12em] text-[#18211F] transition-transform duration-150 hover:bg-[#E4FF7B] active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-          >
-            Make one
-          </Link>
+          {embed ? null : (
+            <Link
+              to="/create"
+              className="pointer-events-auto inline-flex min-h-11 items-center rounded-full bg-[#D8FF46] px-4 text-[11px] font-black uppercase tracking-[0.12em] text-[#18211F] transition-transform duration-150 hover:bg-[#E4FF7B] active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              Make one
+            </Link>
+          )}
           <span className="rounded-full bg-black/20 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white/80">
             {active ? "Live" : "Next"}
           </span>
         </div>
       </div>
 
-      <p className="pointer-events-none absolute inset-x-0 bottom-0 px-5 pb-[max(1.75rem,env(safe-area-inset-bottom))] text-center text-sm font-medium text-white/75">
-        {spec.input === "drag_x" ? "Drag to dodge · swipe for next" : "Tap to play · swipe for next"}
+      {showNudge ? (
+        <p className="pf-swipe-nudge pointer-events-none absolute left-1/2 z-10 rounded-full bg-black/45 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-white/80">
+          swipe ↑
+        </p>
+      ) : null}
+
+      <p
+        className="pointer-events-none absolute inset-x-0 text-center text-[11px] font-medium text-white/60"
+        style={{
+          bottom: "max(14%, calc(env(safe-area-inset-bottom) + 5.5rem))",
+        }}
+      >
+        {hint}
       </p>
     </article>
   );

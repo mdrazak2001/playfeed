@@ -38,9 +38,20 @@ export function PhaserPlayer({ spec }: PhaserPlayerProps) {
       render: {
         antialias: true,
       },
+      banner: false,
     });
 
+    const resize = () => {
+      game.scale.resize(
+        Math.max(1, container.clientWidth),
+        Math.max(1, container.clientHeight),
+      );
+    };
+    const observer = new ResizeObserver(resize);
+    observer.observe(container);
+
     return () => {
+      observer.disconnect();
       game.destroy(true);
     };
   }, [spec]);
