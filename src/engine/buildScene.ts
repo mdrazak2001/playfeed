@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 
 import { darkenHex, hexToNumber, lightenHex, stepStar } from "./color";
+import { shouldSpawnPlayerTrail } from "./fxPolicy";
 import type { BodySpec, GameSpec } from "../types/gameSpec";
 
 type ArcadeDisplay = Phaser.GameObjects.Shape & {
@@ -49,6 +50,8 @@ export function createSpecScene(spec: GameSpec): typeof Phaser.Scene {
     private surviveEndsAt = 0;
     private worldW = 0;
     private worldH = 0;
+    private lastPlayerX = 0;
+    private lastPlayerY = 0;
 
     constructor() {
       super({ key: `spec-${spec.id}` });
@@ -63,6 +66,8 @@ export function createSpecScene(spec: GameSpec): typeof Phaser.Scene {
       this.runtimes = [];
       this.worldW = this.scale.width;
       this.worldH = this.scale.height;
+      this.lastPlayerX = 0;
+      this.lastPlayerY = 0;
       const worldWidth = this.worldW;
       const worldHeight = this.worldH;
       const toX = (value: number) => (value / 100) * worldWidth;
@@ -145,6 +150,8 @@ export function createSpecScene(spec: GameSpec): typeof Phaser.Scene {
       const playerBody = this.player.body;
       playerBody.setBounce(spec.bodies.find((body) => body.kind === "player")?.bounce ?? 0);
       playerBody.setCollideWorldBounds(false);
+      this.lastPlayerX = player.x;
+      this.lastPlayerY = player.y;
 
       if (this.playerRuntime) {
         this.breath = this.tweens.add({
@@ -243,6 +250,7 @@ export function createSpecScene(spec: GameSpec): typeof Phaser.Scene {
         }
       }
 
+      this.input.off("pointerdown");
       this.input.on("pointerdown", () => {
         if (this.finished) {
           this.scene.restart();
@@ -319,9 +327,21 @@ export function createSpecScene(spec: GameSpec): typeof Phaser.Scene {
       }
 
       this.trailFrame += 1;
-      if (this.trailFrame % 3 === 0 && this.playerRuntime) {
+      const moved = Phaser.Math.Distance.Between(
+        player.x,
+        player.y,
+        this.lastPlayerX,
+        this.lastPlayerY,
+      );
+      if (
+        this.trailFrame % 3 === 0 &&
+        this.playerRuntime &&
+        shouldSpawnPlayerTrail(spec.input, moved)
+      ) {
         this.spawnTrail(player.x, player.y, hexToNumber(this.playerRuntime.spec.color));
       }
+      this.lastPlayerX = player.x;
+      this.lastPlayerY = player.y;
 
       if (this.surviveLabel && spec.win.type === "survive_ms") {
         const left = Math.max(0, this.surviveEndsAt - this.time.now);
@@ -559,6 +579,7 @@ export function createSpecScene(spec: GameSpec): typeof Phaser.Scene {
       const dot = this.particles[this.particleCursor % this.particles.length];
       this.particleCursor += 1;
       this.tweens.killTweensOf(dot);
+      dot.setVisible(false);
       return dot;
     }
 

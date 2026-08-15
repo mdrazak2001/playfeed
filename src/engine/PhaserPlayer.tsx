@@ -42,10 +42,10 @@ export function PhaserPlayer({ spec }: PhaserPlayerProps) {
     });
 
     const resize = () => {
-      game.scale.resize(
-        Math.max(1, container.clientWidth),
-        Math.max(1, container.clientHeight),
-      );
+      const width = Math.max(1, container.clientWidth);
+      const height = Math.max(1, container.clientHeight);
+      if (game.scale.width === width && game.scale.height === height) return;
+      game.scale.resize(width, height);
     };
     const observer = new ResizeObserver(resize);
     observer.observe(container);
