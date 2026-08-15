@@ -40,6 +40,8 @@ npm run build
 
 Click the circle to open a small Playfeed panel. Play-only mode uses `/?embed=1`.
 
+![Embeddable Playfeed demo](public/playfeed-embed-demo.gif)
+
 ## Deploy
 
 ```bash
