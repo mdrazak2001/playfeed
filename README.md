@@ -1,54 +1,46 @@
-# React + TypeScript + Vite
+# Playfeed
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Swipe through tiny games in your browser — tap to play, swipe to the next, and an agent can invent a new one in under a minute.**
 
-Currently, two official plugins are available:
+Production URL: https://playfeed-lyart.vercel.app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## What ships
 
-## Expanding the ESLint configuration
+- A mobile-first, snap-scrolling feed of five playable Phaser games.
+- One live game canvas at a time, so slide changes do not stack WebGL contexts.
+- A Create sandbox that asks OpenAI for a JSON game spec, Zod-validates it, lets you play the draft, and publishes it to browser `localStorage`.
+- An offline-safe fallback: seed games always work even when the agent is unavailable.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Develop
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+npm install
+npm run dev -- --host
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Visit the URL Vite prints. To run the Vercel API locally as well, use `npx vercel dev` after linking the project and configuring the environment variable.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Deploy to Vercel
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+npx vercel login
+npx vercel env add OPENAI_API_KEY
+npx vercel --prod
 ```
+
+Set `OPENAI_API_KEY` for both Production and Preview. Do not create a `VITE_OPENAI_API_KEY`: it would expose the key in the browser bundle.
+
+## Checks
+
+```bash
+npm test
+npm run build
+npm run lint
+```
+
+## Demo path
+
+1. Play Lava Leap, then swipe to Spike Rain.
+2. Tap **Make one** and enter a simple game prompt.
+3. Play the generated draft, then publish it to the top of the feed.
+4. If generation is offline, keep swiping the bundled games—the demo is still complete.

@@ -26,7 +26,7 @@ export const GameSlide = forwardRef<HTMLDivElement, GameSlideProps>(function Gam
         <div className="h-full w-full" aria-hidden="true" />
       )}
 
-      <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-5 text-[#F4F7EE]">
+      <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between px-5 pb-5 pt-[max(1.25rem,env(safe-area-inset-top))] text-[#F4F7EE]">
         <div className="max-w-[72%]">
           <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#D8FF46]">
             Playfeed
@@ -48,7 +48,7 @@ export const GameSlide = forwardRef<HTMLDivElement, GameSlideProps>(function Gam
         </div>
       </div>
 
-      <p className="pointer-events-none absolute inset-x-0 bottom-0 px-5 pb-7 text-center text-sm font-medium text-white/75">
+      <p className="pointer-events-none absolute inset-x-0 bottom-0 px-5 pb-[max(1.75rem,env(safe-area-inset-bottom))] text-center text-sm font-medium text-white/75">
         {spec.input === "drag_x" ? "Drag to dodge · swipe for next" : "Tap to play · swipe for next"}
       </p>
     </article>
