@@ -1,4 +1,5 @@
 import { forwardRef } from "react";
+import { Link } from "react-router-dom";
 
 import { PhaserPlayer } from "../engine/PhaserPlayer";
 import type { GameSpec } from "../types/gameSpec";
@@ -34,9 +35,17 @@ export const GameSlide = forwardRef<HTMLDivElement, GameSlideProps>(function Gam
             {spec.title}
           </h1>
         </div>
-        <span className="rounded-full bg-black/20 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white/80">
-          {active ? "Live" : "Next"}
-        </span>
+        <div className="flex flex-col items-end gap-2">
+          <Link
+            to="/create"
+            className="pointer-events-auto inline-flex min-h-11 items-center rounded-full bg-[#D8FF46] px-4 text-[11px] font-black uppercase tracking-[0.12em] text-[#18211F] transition-transform duration-150 hover:bg-[#E4FF7B] active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          >
+            Make one
+          </Link>
+          <span className="rounded-full bg-black/20 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-white/80">
+            {active ? "Live" : "Next"}
+          </span>
+        </div>
       </div>
 
       <p className="pointer-events-none absolute inset-x-0 bottom-0 px-5 pb-7 text-center text-sm font-medium text-white/75">
